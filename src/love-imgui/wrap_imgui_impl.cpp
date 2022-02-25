@@ -70,6 +70,12 @@ static int w_Init(lua_State *L)
 	return 0;
 }
 
+static int w_NewFrame(lua_State *L)
+{
+    NewFrame();
+    return 0;
+}
+
 static int w_Render([[maybe_unused]] lua_State *L)
 {
 	Render();
@@ -250,6 +256,7 @@ static const struct luaL_Reg imguilib[] = {
 	// Implementation
 	{ "ShutDown", w_ShutDown },
 	{ "Init", w_Init },
+	{ "NewFrame", w_NewFrame },
 	{ "Render", w_Render },
 	{ "MouseMoved", w_MouseMoved },
 	{ "MousePressed", w_MousePressed },
@@ -270,8 +277,11 @@ extern "C" int luaopen_imgui(lua_State *L)
 	lua_newtable(L);
 	lua_pushvalue(L, -1);
 	lua_setglobal(L, "imgui");
+
 	wrap_imgui::addImguiWrappers(L);
-	luaL_register(L, nullptr, imguilib);
+
+	lua_pop(L, 1);  // pop the meta-table pushed by the above
+	luaL_setfuncs(L, imguilib, 0);
 
 	return 1;
 }

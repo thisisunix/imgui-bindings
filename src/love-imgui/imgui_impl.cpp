@@ -210,9 +210,10 @@ void NewFrame()
 
 	// Setup display size (every frame to accommodate for window resizing)
 	luaL_dostring(g_L, "return love.graphics.getWidth()");
-	float w = static_cast<float>(luaL_checknumber(g_L, 0));
+	float w = static_cast<float>(luaL_checknumber(g_L, -1));
 	luaL_dostring(g_L, "return love.graphics.getHeight()");
-	float h = static_cast<float>(luaL_checknumber(g_L, 0));
+	float h = static_cast<float>(luaL_checknumber(g_L, -1));
+
 	//int display_w, display_h;
 	// SDL_GL_GetDrawableSize(window, &display_w, &display_h);
 	io.DisplaySize = ImVec2(w, h);
@@ -221,7 +222,7 @@ void NewFrame()
 
 	// Setup time step
 	luaL_dostring(g_L, "return love.timer.getDelta()");
-	double time = luaL_checknumber(g_L, 0);
+	double time = luaL_checknumber(g_L, -1);
 	io.DeltaTime = (float)time;
 
 	// Setup input
